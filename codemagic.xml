@@ -1,0 +1,37 @@
+# codemagic.yml
+
+# Specify the Flutter version
+flutter:
+  version: '2.10.2'
+
+# Specify the build pipeline
+workflows:
+  version: 2
+  build_and_deploy:
+    name: Build and Deploy
+    environment:
+      flutter: $FLUTTER_VERSION
+    scripts:
+      - name: Install dependencies
+        script: flutter pub get
+
+      - name: Build IPA
+        script: flutter build ios --release --no-codesign
+
+    # Specify the artifacts to be collected after the build
+    artifacts:
+      - build/ios/iphoneos/Runner.app # This is the path to your app in the build output
+
+    # Define deployment configuration for iOS
+    ios:
+      xcode: 12.5.1 # Set the appropriate Xcode version
+
+      # Customize deployment to App Store
+      <!-- deploy:
+        release_notes: "Release notes for the app"
+        destinations:
+          - name: app_store
+            app_id: $APP_STORE_APP_ID
+            issuer_id: $APP_STORE_ISSUER_ID
+            key_id: $APP_STORE_KEY_ID
+            key_file: $APP_STORE_KEY_FILE -->
